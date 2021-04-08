@@ -3,7 +3,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-east-1"
+  region = "us-east-2"
 }
 
 resource "aws_vpc" "my_vpc" {
@@ -19,6 +19,24 @@ resource "aws_subnet" "my_subnet" {
   availability_zone = "us-east-1a"
   tags = {
     Name = "tf-0.12-for-example"
+  }
+}
+
+resource "aws_default_security_group" "default" {
+  vpc_id = aws_vpc.my_vpc.id
+
+  ingress {
+    protocol  = -1
+    from_port = 0
+    to_port   = 65535
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 65535
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
