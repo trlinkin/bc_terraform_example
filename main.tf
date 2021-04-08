@@ -22,6 +22,25 @@ resource "aws_subnet" "my_subnet" {
   }
 }
 
+resource "aws_default_security_group" "default" {
+  vpc_id = aws_vpc.my_vpc.id
+
+  ingress {
+    protocol  = -1
+    self      = true
+    from_port = 0
+    to_port   = 1024
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
 resource "aws_instance" "ubuntu" {
   count = 3
   ami           = "ami-2e1ef954"
